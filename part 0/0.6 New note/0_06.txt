@@ -1,0 +1,17 @@
+note over browser:
+when some data is typed and save button is
+pressed the spa.js create a note object and 
+redraws the page with redrawNotes() function and 
+then convert data to json type and send the 
+post request with data to the server
+end note
+
+browser->server: HTTP POST https://studies.cs.helsinki.fi/exampleapp/new_note_spa
+
+note over server:
+server receiving the post request 
+saves the data and sends a 201 
+response back
+end note
+
+server-->browser: HTTP 201 response send to browser
