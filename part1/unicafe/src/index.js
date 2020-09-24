@@ -8,19 +8,56 @@ const Button = ({handleClick, text}) => {
 }
 
 const Display = ({text, score}) => {
-  return(
-  <p>{text} {score}</p>
-  )
+  if(text==='positive'){
+    return(<div>{text} {score} %</div>)
+  }else{
+    return(
+    <div>{text} {score}</div>
+    )
+}
 }
 
 const App = () => {
   const [good,setGood] = useState(0)
   const [neutral,setNeutral] = useState(0)
   const [bad, setBad] = useState(0)
+  const [all, setAll] = useState(0)
+  const [average,setAverage] = useState(0)
+  const [poistive, setPositive] = useState(0)
 
-  const giveGood = () => setGood(good+1)
-  const giveNeutral = () => setNeutral(neutral+1)
-  const giveBad = () => setBad(bad+1)
+  const calc = (x) => {
+    let newGood = good
+    let newBad = bad
+    let newAll = all+1
+    if(x==='g'){
+      newGood+=1
+    }else if(x==='b'){
+      newBad+=1
+    }
+    let newAverage = (newGood-newBad)/(newAll)
+    let newPositive = (newGood)/(newAll)*100
+    setAverage(newAverage)
+    setPositive(newPositive)
+  } 
+
+  const giveGood = () => {
+    setGood(good+1) 
+    setAll(all+1)
+    calc('g')
+  } 
+
+  const giveNeutral = () => {
+    setNeutral(neutral+1)
+    setAll(all+1)
+    calc('n')
+  }
+
+  const giveBad = () => {
+    setBad(bad+1)
+    setAll(all+1)
+    calc('b')
+  }
+
 
   return(
     <div>
@@ -32,14 +69,12 @@ const App = () => {
       <Display text='good' score={good}/>
       <Display text='neutral' score={neutral}/>
       <Display text='bad' score={bad}/>
+      <Display text='all' score={all}/>
+      <Display text='average' score={average} />
+      <Display text='positive' score={poistive} /> 
     </div>
   )
 }
-
-
-
-
-
 
 ReactDOM.render(<App />, document.getElementById('root'));
 
