@@ -5,6 +5,7 @@ const App = (props) => {
   const [selected, setSelected] = useState(0)
   const [votes,setVotes] =  useState(new Array(props.anecdotes.length).fill(0))
   const [value,setValue] = useState(0)
+  const [mostVoted,setMostVoted] = useState(0)
   
   const randomInt = x => Math.floor(Math.floor(x)*Math.random())
   
@@ -14,19 +15,35 @@ const App = (props) => {
     setValue(votes[x])
   } 
 
+  const findFamous = () => {
+    let newMostVoted = mostVoted
+    for(let i=0;i<votes.length;i++){
+      if(votes[i]>votes[newMostVoted]){
+        newMostVoted=i
+      }
+    }
+    return(newMostVoted)
+  }
+
   const changeVote = () => {
      const newVotes = votes
      newVotes[selected]+=1
      setVotes(newVotes)
      setValue(newVotes[selected])
-  } 
+     let mV = findFamous()
+     setMostVoted(mV)
+   } 
 
   return (
     <div>
+      <h1>Anecdote of the day</h1>
       <div>{props.anecdotes[selected]}</div>
       <div>has {value} votes</div>
       <button onClick={changeVote}>vote</button>
       <button onClick={randomSelection}>next anecdote</button>
+      <h1>Anecdote with most votes</h1>
+      <div>{props.anecdotes[mostVoted]}</div>
+      <div>has {votes[mostVoted]} votes</div>
     </div>
   )
 }
