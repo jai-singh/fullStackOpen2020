@@ -7,7 +7,7 @@ const Header = ({ course }) => {
 }
   
 const Total = ({ course }) => {
-    console.log(course);
+    
     const total = course.parts.reduce((sum,courses) => sum=sum+courses.exercises,0)
     
     return(
