@@ -1,1 +1,1 @@
-##Answer to course information 
+##Answer to course information question
