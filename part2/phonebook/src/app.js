@@ -3,6 +3,7 @@ import Persons from './components/Persons'
 import PersonForm from './components/PersonForm'
 import Filter from './components/Filter'
 import phonebookService from './services/phonebook'
+import Notification from './components/Notification'
 
 const App = () => {
   const [ persons, setPersons ] = useState([]) 
@@ -10,6 +11,8 @@ const App = () => {
   const [ newNumber, setNewNumber ] = useState('')
   const [ searchResult, setSearchResult] = useState([])
   const [ searchQuery, setSearchQuery] = useState('')
+  const [ message, setMessage] = useState('')
+  const [ isError, setIsError] = useState(false)
 
   useEffect(() => {
     phonebookService
@@ -27,14 +30,29 @@ const App = () => {
         phonebookService
           .create(personObject)
           .then(data => setPersons(persons.concat(data)))
+          .then(() => { 
+            setMessage(`Added ${personObject.name}`)
+            setIsError(false)
+            setTimeout(() => {
+              setMessage('')
+            },5000)
+          }) 
       }else{
         phonebookService
           .update(id,personObject)
           .then(data => {
             const newList = persons.map( person => person.id!==id ? person : data)
-            setPersons(newList)            
+            setPersons(newList)                       
           })
-      }      
+          .then(() => { 
+            setMessage(`Updated details about ${personObject.name}`)
+            setIsError(false)
+            setTimeout(() => {
+              setMessage('')
+            },5000)
+          }) 
+      }
+      
     }
     setNewName('')
     setNewNumber('')
@@ -49,10 +67,10 @@ const App = () => {
         addPersonToList(true,persons[foundIndex].id)
         return
       }
-    } 
-    addPersonToList()           
+    }else{
+      addPersonToList()         
+    }
   }
-
   const handleNewName = (event) => {
     setNewName(event.target.value)
   }
@@ -95,8 +113,17 @@ const App = () => {
           const personsList = persons.filter(person => person.id !== id)
           setPersons(personsList)
           changeSearchResult(searchQuery,personsList)
-        }
-        )
+        })
+        .catch(error => {
+          setMessage(`Information of ${personName} has already been removed from server`)
+          setIsError(true)
+          setTimeout(() => {
+            setMessage('')
+          },5000)
+          const personsList = persons.filter(person => person.id !== id)
+          setPersons(personsList)
+          changeSearchResult(searchQuery,personsList)
+        })
     }
     
   } 
@@ -104,6 +131,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={message} isError={isError}/>
       <Filter searchQuery={searchQuery} performSearch={performSearch}/>
       <PersonForm newName={newName} handleNewName={handleNewName}
         newNumber={newNumber} handleNewNumber={handleNewNumber}
