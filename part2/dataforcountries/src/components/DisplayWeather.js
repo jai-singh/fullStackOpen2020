@@ -5,11 +5,8 @@ const DisplayWeather = ({country}) => {
     const api_key = process.env.REACT_APP_API_KEY
     const [weather, setWeather] = useState([])
   
-    const getURL = 'http://api.weatherstack.com/current?access_key='
-      .concat(api_key)
-      .concat('&query=')
-      .concat(country.capital)
-      
+    const getURL = `http://api.weatherstack.com/current?access_key=${api_key}&query=${country.capital}`      
+    
     axios
       .get(getURL)
       .then( response =>{
