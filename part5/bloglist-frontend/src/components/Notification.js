@@ -5,7 +5,7 @@ const Notification = ({ message, isError }) => {
   if (message!=='') {
     return(
       <div className={typeOfNotification}>
-        {message}  
+        {message}
       </div>
     )
   } else {

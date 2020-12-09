@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 
 const NewBlogForm = ({ createNewBlog }) => {
   const [title, setTitle] = useState([])
@@ -22,26 +22,26 @@ const NewBlogForm = ({ createNewBlog }) => {
     <div>
       <h2>create new</h2>
       <div>
-        title: <input 
-          type='text' 
-          value={title} 
-          name='title' 
+        title: <input
+          type='text'
+          value={title}
+          name='title'
           onChange={({ target }) => setTitle(target.value)}
         />
       </div>
       <div>
-        author: <input 
-          type='text' 
-          value={author} 
-          name='author' 
+        author: <input
+          type='text'
+          value={author}
+          name='author'
           onChange={({ target }) => setAuthor(target.value)}
         />
       </div>
       <div>
-        url: <input 
-          type='text' 
-          value={url} 
-          name='url' 
+        url: <input
+          type='text'
+          value={url}
+          name='url'
           onChange={({ target }) => setUrl(target.value)}
         />
       </div>
