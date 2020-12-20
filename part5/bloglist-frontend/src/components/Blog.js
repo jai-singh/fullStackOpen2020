@@ -2,8 +2,7 @@ import React, { useState } from 'react'
 import blogService from '../services/blogs'
 import PropTypes from 'prop-types'
 
-const Blog = ({ blog, user }) => {
-  const [likes, setLikes]=useState(blog.likes)
+const Blog = ({ blog, user, updateLike }) => {
   const [visible, setVisible] = useState(false)
   const [blogVisiblity, setBlogVisiblity] = useState('')
 
@@ -23,19 +22,6 @@ const Blog = ({ blog, user }) => {
     setVisible(!visible)
   }
 
-  const updateLike = () => {
-    setLikes(likes+1)
-    const updatedBlog = {
-      user: blog.user[0].id,
-      likes: likes+1,
-      author: blog.author,
-      title: blog.title,
-      url: blog.url
-    }
-
-    blogService.update({ newObject: updatedBlog, id: blog.id })
-  }
-
   const removeBlog = () => {
     const toRemove = window.confirm(`Remove blog ${blog.title} by ${blog.author}`)
     if(toRemove) {
@@ -49,17 +35,17 @@ const Blog = ({ blog, user }) => {
     { display: 'none' }
 
   return(
-    <div style={blogStyle}>
+    <div style={blogStyle} className='blog'>
       <div>
         {blog.title} {blog.author}
       </div>
       <div style = {hideWhenVisible}>
         <button onClick={toggleVisibility}>show</button>
       </div>
-      <div style = {showWhenVisible}>
+      <div style = {showWhenVisible} className='extrainfo'>
         <div>
           <div>{blog.url}</div>
-          <div>{likes} <button type='Submit' onClick={() => updateLike()}>like</button>
+          <div>{blog.likes} <button type='Submit' onClick={updateLike} >like</button>
           </div>
           <div>{blog.user[0].name}</div>
           <button type='Submit' style={deleteVisibility} onClick={removeBlog}>remove</button>

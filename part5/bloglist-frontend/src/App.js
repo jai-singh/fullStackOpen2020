@@ -14,7 +14,6 @@ const App = () => {
   const [message, setMessage] = useState('')
   const [isError, setIsError] = useState(false)
 
-
   useEffect(() => {
     blogService.getAll().then(blogs =>
       setBlogs( blogs )
@@ -124,6 +123,18 @@ const App = () => {
     })
   }
 
+  const updateLike = (id) => {
+    const blog = blogs.find(blog => blog.id === id)
+    if(blog.user[0].username !== user.username) {
+      displayMessage(true, 'cannot update details about blog if you have not created it')
+      return
+    }
+    const updatedBlog = { ...blog, likes: blog.likes+1 }
+    setBlogs(blogs.map(blog => blog.id !== id ? blog : updatedBlog))
+
+    blogService.update({ newObject: updatedBlog, id: blog.id })
+  }
+
   const blogForm = () => {
     sortBlogs()
     return (
@@ -136,7 +147,11 @@ const App = () => {
         </p>
         {newBlogForm()}
         {blogs.map(blog =>
-          <Blog key={blog.id} blog={blog} user={user}/>
+          <Blog key={blog.id}
+            blog={blog}
+            user={user}
+            updateLike={() => updateLike(blog.id)}
+          />
         )}
       </div>
     )
