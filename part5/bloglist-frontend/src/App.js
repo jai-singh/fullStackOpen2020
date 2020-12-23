@@ -92,6 +92,7 @@ const App = () => {
         <div>
           <div>username</div>
           <input
+            id='username'
             type='text'
             value={username}
             name='Username'
@@ -101,13 +102,14 @@ const App = () => {
         <div>
           <div>password</div>
           <input
+            id='password'
             type='password'
             value={password}
             name='Password'
             onChange={({ target }) => setPassword(target.value)}
           />
         </div>
-        <br/> <button type='Submit'>login</button>
+        <br/> <button id='login-button' type='Submit'>login</button>
       </form>
     )
   }
@@ -115,9 +117,9 @@ const App = () => {
   const sortBlogs = () => {
     blogs.sort((a,b) => {
       if(a.likes > b.likes) {
-        return 1
-      } else if (a.likes < b.likes) {
         return -1
+      } else if (a.likes < b.likes) {
+        return 1
       }
       return 0
     })
@@ -125,10 +127,7 @@ const App = () => {
 
   const updateLike = (id) => {
     const blog = blogs.find(blog => blog.id === id)
-    if(blog.user[0].username !== user.username) {
-      displayMessage(true, 'cannot update details about blog if you have not created it')
-      return
-    }
+
     const updatedBlog = { ...blog, likes: blog.likes+1 }
     setBlogs(blogs.map(blog => blog.id !== id ? blog : updatedBlog))
 
@@ -146,13 +145,15 @@ const App = () => {
           <button type='Submit' onClick={handleLogout}>logout</button>
         </p>
         {newBlogForm()}
-        {blogs.map(blog =>
-          <Blog key={blog.id}
-            blog={blog}
-            user={user}
-            updateLike={() => updateLike(blog.id)}
-          />
-        )}
+        <div id='blog-list'>
+          {blogs.map(blog =>
+            <Blog key={blog.id}
+              blog={blog}
+              user={user}
+              updateLike={() => updateLike(blog.id)}
+            />
+          )}
+        </div>
       </div>
     )
   }
