@@ -9,17 +9,18 @@ const messageReducer = (state = '', action) => {
   }
 }
 
-export const setMessage = message => {
-  return {
-    type: 'SET_MESSAGE',
-    message
+export const setMessage = (message, time) => {
+  return async dispatch => {
+    await setTimeout(() => {
+      dispatch({
+        type: 'REMOVE_MESSAGE'
+      })
+    },time*1000)
+    dispatch({
+      type: 'SET_MESSAGE',
+      message
+    })   
   }
 } 
-
-export const removeMessage = () => {  
-  return {
-    type: 'REMOVE_MESSAGE'
-  }  
-}
 
 export default messageReducer
