@@ -1,9 +1,28 @@
-const messageReducer = (state = '', action) => {
+const defaultState = {
+  message: '',
+  timeOutId: null
+}
+
+const messageReducer = (state = defaultState, action) => {
   switch(action.type) {
     case 'SET_MESSAGE':
-      return action.message
+      if(state.timeOutId) {
+        clearTimeout(state.timeOutId)
+      }
+      return {
+        message: action.message,
+        timeOutId: null
+      }
     case 'REMOVE_MESSAGE':
-      return ''
+      return {
+        message: '',
+        timeOutId: null
+      }
+    case 'SET_TIMEOUT':
+      return {
+        message: state.message,
+        timeOutId: action.timeOutId
+      }
     default:
       return state
   }
@@ -11,15 +30,21 @@ const messageReducer = (state = '', action) => {
 
 export const setMessage = (message, time) => {
   return async dispatch => {
-    await setTimeout(() => {
-      dispatch({
-        type: 'REMOVE_MESSAGE'
-      })
-    },time*1000)
     dispatch({
       type: 'SET_MESSAGE',
-      message
-    })   
+      message: message
+    })
+    
+    const timeOutId = await setTimeout(() => {
+        dispatch({
+          type: 'REMOVE_MESSAGE'
+        })
+      },time*1000)
+
+    dispatch({
+      type: 'SET_TIMEOUT',
+      timeOutId: timeOutId
+    })     
   }
 } 
 
